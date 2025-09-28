@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Stage Awaits - Audition Site</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Define the custom color palette to match the mood of the images */
+        :root {
+            --color-indigo-dark: #130a2f; /* Deep Indigo Background */
+            --color-aqua: #42f2f2;       /* Electric Aqua */
+            --color-gold: #FFC300;       /* Primary Gold Accent */
+            --color-purple-light: #4A1D7C; /* Light purple for subtle glow */
+            --color-dark-card: #1D103F;  /* Slightly lighter background for cards */
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--color-indigo-dark);
+            color: #E0E7FF; /* Off-white text */
+            overflow-x: hidden;
+        }
+
+        /* Hero Background Simulation (Simulates the stage and crowd) */
+        .hero-bg {
+            /* Using a placeholder for the dramatic stage image */
+            background-image: url('https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=1920&auto=format&fit=crop'); 
+            background-size: cover;
+            background-position: bottom center;
+            position: relative;
+        }
+
+        /* Overlay for text readability and color integration */
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(19, 10, 47, 0.4) 0%, var(--color-indigo-dark) 100%);
+            z-index: 1;
+        }
+
+        .content-z {
+            z-index: 2;
+        }
+
+        /* Gold CTA button styling */
+        .cta-gold {
+            background-color: var(--color-gold);
+            color: var(--color-indigo-dark);
+            box-shadow: 0 0 40px rgba(255, 195, 0, 0.8);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cta-gold:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 60px rgba(255, 195, 0, 1);
+        }
+
+        /* Custom glow effect for judge profile images */
+        .judge-glow {
+            box-shadow: 0 0 20px rgba(74, 29, 124, 0.7); /* Light purple glow */
+            transition: transform 0.3s;
+        }
+        .judge-glow:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(74, 29, 124, 0.9);
+        }
+
+        /* Prize/Step card styling */
+        .prize-card, .step-card {
+            background-color: var(--color-dark-card);
+            border: 1px solid rgba(74, 29, 124, 0.4);
+            transition: all 0.3s;
+        }
+        .prize-card:hover, .step-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(19, 10, 47, 0.8);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000; /* High z-index to cover everything */
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-content {
+            background-color: var(--color-dark-card);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .close-button {
+            color: var(--color-aqua);
+            transition: color 0.2s;
+        }
+        .close-button:hover {
+            color: var(--color-gold);
+        }
+
+        /* Form Input Styles */
+        .form-input {
+            background-color: var(--color-indigo-dark);
+            border: 1px solid rgba(66, 242, 242, 0.3);
+            color: white;
+        }
+        .form-input:focus {
+            border-color: var(--color-gold);
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 195, 0, 0.5);
+        }
+
+        /* FAQ Accordion Styles */
+        .faq-item summary {
+            list-style: none; /* Remove default marker */
+            cursor: pointer;
+        }
+        .faq-item summary::-webkit-details-marker {
+            display: none; /* Remove default marker for Chrome/Safari */
+        }
+        .faq-item .faq-icon {
+            transition: transform 0.3s ease;
+        }
+        .faq-item[open] .faq-icon {
+            transform: rotate(45deg);
+        }
+        .faq-answer {
+            transition: all 0.3s ease-in-out;
+            overflow: hidden;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 left-0 right-0 z-50 p-4 bg-transparent backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Logo/Title Placeholder -->
+            <h1 class="text-3xl font-extrabold text-white tracking-wider">VOICE<span style="color: var(--color-aqua);">.IO</span></h1>
+            
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex space-x-8 text-lg font-medium">
+                <a href="how_it_works.html" class="text-gray-300 hover:text-white transition duration-200">How It Works</a>
+                <a href="#judges" class="text-gray-300 hover:text-white transition duration-200">Judges</a>
+                <a href="#faq" class="text-gray-300 hover:text-white transition duration-200">FAQ</a>
+                <a href="login.html" class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold transition duration-200" style="background-color: var(--color-gold); color: var(--color-indigo-dark);">Login</a>
+            </nav>
+
+            <!-- Mobile Menu Icon (Hidden on Desktop) -->
+            <button id="mobile-menu-button" class="md:hidden text-white text-3xl z-[1001]">☰</button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Panel (Initially Hidden) -->
+    <div id="mobile-menu" class="fixed inset-0 z-[1000] hidden flex flex-col items-center justify-center space-y-8 text-2xl font-bold transition-opacity duration-300" style="background-color: var(--color-indigo-dark);">
+        <!-- Explicit Close Button -->
+        <button id="mobile-menu-close-button" class="absolute top-5 right-6 text-4xl font-light leading-none" style="color: var(--color-aqua);">
+            &times;
+        </button>
+        <a href="how_it_works.html" class="text-gray-300 hover:text-white transition duration-200 mobile-nav-link">How It Works</a>
+        <a href="#judges" class="text-gray-300 hover:text-white transition duration-200 mobile-nav-link">Judges</a>
+        <a href="#faq" class="text-gray-300 hover:text-white transition duration-200 mobile-nav-link">FAQ</a>
+        <a href="login.html" class="mt-4 px-8 py-3 rounded-lg font-semibold transition duration-200 mobile-nav-link" style="background-color: var(--color-gold); color: var(--color-indigo-dark);">Login</a>
+    </div>
+
+    <!-- 1. Hero Section -->
+    <section id="hero" class="hero-bg h-[80vh] min-h-[700px] flex items-center justify-center pt-24 pb-16 relative overflow-hidden">
+        <div class="content-z text-center max-w-4xl px-4">
+            <h2 class="text-6xl sm:text-7xl lg:text-8xl font-extrabold mb-4 leading-tight">
+                <span class="block" style="color: var(--color-aqua);">YOUR STAGE AWAITS</span>
+                <span class="block" style="color: var(--color-gold);">AUDITION NOW</span>
+            </h2>
+            <p class="text-xl sm:text-2xl text-gray-300 font-medium mb-12">
+                Singing contest for all ages. Professional judges. Amazing prizes.
+            </p>
+            <!-- CTA 1: Triggers Modal -->
+            <a href="#" onclick="openModal(); return false;" class="inline-block px-12 py-5 rounded-full text-2xl font-bold cta-gold transform hover:scale-105 transition-all duration-300">
+                START YOUR AUDITION
+            </a>
+        </div>
+    </section>
+    
+    <!-- 2. Category Cards & Deadline Section -->
+    <section id="categories" class="relative -mt-20 z-20 max-w-7xl mx-auto px-4 pb-20">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Card 1: For Kids -->
+            <div class="p-8 rounded-xl prize-card text-center sm:text-left">
+                <div class="flex items-center space-x-3 mb-3 justify-center sm:justify-start">
+                    <!-- Microphone SVG -->
+                    <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--color-aqua);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7v0a7 7 0 01-7-7v-3a3 3 0 013-3h8a3 3 0 013 3v3z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18v3m0 0h3m-3 0h-3"></path>
+                    </svg>
+                    <svg class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.638-.921 1.938 0l2.365 7.284 7.663.56c.974.072 1.365 1.326.657 1.968l-5.875 4.103 2.193 7.026c.307.986-.807 1.764-1.637 1.155l-5.748-4.123-5.748 4.123c-.83.609-1.944-.169-1.637-1.155l2.193-7.026L.085 12.739c-.708-.642-.317-1.896.657-1.968l7.663-.56L9.049 2.927z"/></svg>
+                    <h3 class="text-xl font-bold" style="color: var(--color-aqua);">FOR KIDS</h3>
+                </div>
+                <p class="text-base text-gray-400">Ages 5-12. Pop, rock, and more! Submission requires parental consent.</p>
+            </div>
+
+            <!-- Card 2: For Adults -->
+            <div class="p-8 rounded-xl prize-card text-center sm:text-left">
+                <div class="flex items-center space-x-3 mb-3 justify-center sm:justify-start">
+                    <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--color-aqua);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.857 2.197l-2.75 10A2 2 0 0115.214 24H8.786a2 2 0 01-1.857-2.197l-2.75-10A2 2 0 015.236 10H10m4 0V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v5m7 0v1h-5v-1"></path>
+                    </svg>
+                    <h3 class="text-xl font-bold" style="color: var(--color-aqua);">FOR ADULTS</h3>
+                </div>
+                <p class="text-base text-gray-400">Ages 13+ All genres welcome! Compete for the top professional prizes.</p>
+            </div>
+
+            <!-- Card 3: Deadline -->
+            <div class="p-8 rounded-xl prize-card text-center">
+                <div class="flex items-center space-x-3 mb-3 justify-center">
+                    <!-- Clock SVG -->
+                    <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--color-aqua);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <h3 class="text-xl font-bold" style="color: var(--color-aqua);">DEADLINE</h3>
+                </div>
+                <!-- Responsive font size using clamp() for smooth scaling -->
+                <div id="countdown" class="font-extrabold mt-3" style="color: var(--color-gold); font-size: clamp(2.25rem, 10vw, 3.75rem);">
+                    00:00:00:00
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. How It Works Section -->
+    <section id="how-it-works" class="py-20 px-4 bg-gray-900/50">
+        <div class="max-w-6xl mx-auto text-center">
+            <h2 class="text-5xl font-extrabold mb-4" style="color: var(--color-aqua);">HOW IT WORKS</h2>
+            <p class="text-xl text-gray-400 mb-16">The three simple steps to submit your talent and take the stage.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                
+                <!-- Step 1 Card -->
+                <div class="flex flex-col items-center p-8 rounded-xl step-card transform hover:scale-[1.02] transition-all duration-300">
+                    <div class="relative mb-6">
+                        <span class="absolute -top-4 -left-4 text-7xl font-extrabold opacity-10" style="color: var(--color-aqua);">01</span>
+                        <!-- Record Icon SVG -->
+                        <svg class="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--color-gold);">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.552-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.448.894L15 14M15 10v4M2 12h3M9 12h2"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2h-3"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3" style="color: var(--color-aqua);">1. Record Your Performance</h3>
+                    <p class="text-base text-gray-400">Capture your best singing performance! Video submissions are encouraged, but high-quality audio is also accepted (MP3/MP4 format).</p>
+                </div>
+
+                <!-- Step 2 Card -->
+                <div class="flex flex-col items-center p-8 rounded-xl step-card transform hover:scale-[1.02] transition-all duration-300">
+                    <div class="relative mb-6">
+                        <span class="absolute -top-4 -left-4 text-7xl font-extrabold opacity-10" style="color: var(--color-aqua);">02</span>
+                        <!-- Upload Icon SVG -->
+                        <svg class="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--color-gold);">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3" style="color: var(--color-aqua);">2. Complete The Form</h3>
+                    <p class="text-base text-gray-400">Fill out your details, agree to the terms, and securely upload your video or audio file directly through our system.</p>
+                </div>
+
+                <!-- Step 3 Card -->
+                <div class="flex flex-col items-center p-8 rounded-xl step-card transform hover:scale-[1.02] transition-all duration-300">
+                    <div class="relative mb-6">
+                        <span class="absolute -top-4 -left-4 text-7xl font-extrabold opacity-10" style="color: var(--color-aqua);">03</span>
+                        <!-- Review Icon SVG -->
+                        <svg class="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--color-gold);">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944c2.812 0 5.485.801 7.747 2.222m-2.22 15.658A11.955 11.955 0 0112 21.056c-2.812 0-5.485-.801-7.747-2.222m2.22-15.658L12 9l5.618-4.016"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3" style="color: var(--color-aqua);">3. Await The Results</h3>
+                    <p class="text-base text-gray-400">Our professional panel will review all submissions. Finalists will be contacted via email before the announcement date!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Judges Section -->
+    <section id="judges" class="py-20 px-4">
+        <div class="max-w-6xl mx-auto text-center">
+            <h2 class="text-5xl font-extrabold mb-4" style="color: var(--color-aqua);">MEET THE JUDGES</h2>
+            <p class="text-xl text-gray-400 mb-16">Your performance will be reviewed by top industry professionals.</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+                
+                <!-- Judge Card 1 -->
+                <div class="flex flex-col items-center judge-glow p-8 rounded-xl" style="background-color: var(--color-dark-card);">
+                    <!-- Placeholder Image for David Chen -->
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&auto=format&fit=crop" alt="David Chen" class="w-44 h-44 rounded-full object-cover mb-6 border-4 border-transparent hover:border-teal-400 transition-colors duration-300">
+                    <h4 class="text-2xl font-bold mb-1 text-white">DAVID CHEN</h4>
+                    <p class="text-md font-medium" style="color: var(--color-gold);">Grammy Nominated Producer</p>
+                </div>
+
+                <!-- Judge Card 2 -->
+                <div class="flex flex-col items-center judge-glow p-8 rounded-xl" style="background-color: var(--color-dark-card);">
+                    <!-- Placeholder Image for Sarah Jenkins -->
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&auto=format&fit=crop" alt="Sarah Jenkins" class="w-44 h-44 rounded-full object-cover mb-6 border-4 border-transparent hover:border-teal-400 transition-colors duration-300">
+                    <h4 class="text-2xl font-bold mb-1 text-white">SARAH JENKINS</h4>
+                    <p class="text-md font-medium" style="color: var(--color-gold);">Celebrity Vocal Coach</p>
+                </div>
+
+                <!-- Judge Card 3 -->
+                <div class="flex flex-col items-center judge-glow p-8 rounded-xl" style="background-color: var(--color-dark-card);">
+                    <!-- Placeholder Image for Michael Lee -->
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop" alt="Michael Lee" class="w-44 h-44 rounded-full object-cover mb-6 border-4 border-transparent hover:border-teal-400 transition-colors duration-300">
+                    <h4 class="text-2xl font-bold mb-1 text-white">MICHAEL LEE</h4>
+                    <p class="text-md font-medium" style="color: var(--color-gold);">Talent Scout & AR</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Prizes Section -->
+    <section id="prizes" class="py-20 px-4 bg-gray-900">
+        <div class="max-w-6xl mx-auto text-center">
+            <h2 class="text-5xl font-extrabold mb-4" style="color: var(--color-aqua);">WHAT YOU COULD WIN</h2>
+            <p class="text-xl text-gray-400 mb-16">This is your chance to launch your music career and win incredible prizes.</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Prize Card 1: Grand Prize -->
+                <div class="prize-card p-8 rounded-2xl flex flex-col items-center border-4 border-yellow-500">
+                    <h3 class="text-2xl font-extrabold mb-4" style="color: var(--color-gold);">GRAND PRIZE WINNER</h3>
+                    <!-- Trophy SVG -->
+                    <svg class="w-20 h-20 mb-6" fill="currentColor" viewBox="0 0 24 24" style="color: var(--color-gold);">
+                        <path d="M12 1.5l-2.5 5H4.5l3.5 2.5-1 4.5 5.5-3 5.5 3-1-4.5 3.5-2.5h-5L12 1.5zM12 15c-3.31 0-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8h-2c0 3.31-2.69 6-6 6zm-4 4h8v2H8v-2z"></path>
+                    </svg>
+                    <p class="text-lg font-medium text-center text-gray-200">
+                        **₹4,00,000 Cash Prize,** Professional Studio Session & Mentorship with a top producer.
+                    </p>
+                </div>
+
+                <!-- Prize Card 2: Runner Up -->
+                <div class="prize-card p-8 rounded-2xl flex flex-col items-center">
+                    <h3 class="text-2xl font-bold mb-4" style="color: var(--color-aqua);">RUNNER UP PACKAGE</h3>
+                    <!-- Camera SVG -->
+                    <svg class="w-20 h-20 mb-6" fill="currentColor" viewBox="0 0 24 24" style="color: var(--color-aqua);">
+                        <path d="M4 4h4l2-2h4l2 2h4c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zM12 17c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5z"></path>
+                    </svg>
+                    <p class="text-lg font-medium text-center text-gray-200">
+                        High-Quality Recording Equipment Bundle & Feature on official contest channels.
+                    </p>
+                </div>
+
+                <!-- Prize Card 3: Fan Favorite -->
+                <div class="prize-card p-8 rounded-2xl flex flex-col items-center">
+                    <h3 class="text-2xl font-bold mb-4 text-white">FAN FAVORITE</h3>
+                    <!-- Headphones SVG -->
+                    <svg class="w-20 h-20 mb-6" fill="currentColor" viewBox="0 0 24 24" style="color: var(--color-aqua);">
+                        <path d="M12 1C6.48 1 2 5.48 2 11v6h2v-6c0-4.41 3.59-8 8-8s8 3.59 8 8v6h2v-6c0-5.52-4.48-10-10-10zm-3 18h6v2H9v-2z"></path>
+                    </svg>
+                    <p class="text-lg font-medium text-center text-gray-200">
+                        ₹40,000 Gift Card & Personal Consultation Session with a renowned vocal coach.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. FAQ Section -->
+    <section id="faq" class="py-20 px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-extrabold mb-4" style="color: var(--color-aqua);">FREQUENTLY ASKED QUESTIONS</h2>
+                <p class="text-xl text-gray-400">Have questions? We've got answers.</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- FAQ Item 1 -->
+                <details class="faq-item p-6 rounded-lg" style="background-color: var(--color-dark-card);">
+                    <summary class="flex justify-between items-center text-xl font-bold text-white">
+                        What are the age categories?
+                        <span class="faq-icon text-2xl" style="color: var(--color-aqua);">+</span>
+                    </summary>
+                    <p class="faq-answer text-gray-300 mt-4 pt-4 border-t border-gray-700">
+                        We have two main categories: "For Kids" (ages 5-12) and "For Adults" (ages 13 and up). Please ensure you enter the correct category based on your age at the time of submission.
+                    </p>
+                </details>
+
+                <!-- FAQ Item 2 -->
+                <details class="faq-item p-6 rounded-lg" style="background-color: var(--color-dark-card);">
+                    <summary class="flex justify-between items-center text-xl font-bold text-white">
+                        What file formats are accepted for submission?
+                        <span class="faq-icon text-2xl" style="color: var(--color-aqua);">+</span>
+                    </summary>
+                    <p class="faq-answer text-gray-300 mt-4 pt-4 border-t border-gray-700">
+                        We accept video files (MP4, MOV) and high-quality audio files (MP3). While video is preferred, a great audio performance is also highly valued. The maximum file size is 200MB.
+                    </p>
+                </details>
+
+                <!-- Add more <details> blocks here for more questions -->
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Persistent Final CTA -->
+    <section class="py-16 px-4" style="background-color: var(--color-aqua);">
+        <div class="max-w-6xl mx-auto text-center">
+            <h3 class="text-3xl sm:text-4xl font-extrabold mb-4" style="color: var(--color-indigo-dark);">
+                Ready to Share Your Voice <span class="hidden sm:inline">→</span>
+            </h3>
+            <!-- CTA 3: Triggers Modal -->
+            <a href="#" onclick="openModal(); return false;" class="inline-block px-12 py-4 rounded-lg text-xl font-extrabold cta-gold shadow-lg hover:shadow-xl transition-all duration-300">
+                START YOUR AUDITION NOW <span class="ml-2">→</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 px-4 text-center text-gray-500 text-sm">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center">
+            <div class="flex space-x-4 mb-4 sm:mb-0">
+                <a href="#" class="hover:text-white transition">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition">Terms & Conditions</a>
+                <a href="#" class="hover:text-white transition">Contact Us</a>
+            </div>
+            <p>&copy; 2024 Voice.io Auditions. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+
+    <!-- Audition Form Modal -->
+    <div id="audition-modal" class="modal-overlay fixed inset-0 hidden items-center justify-center p-4" onclick="if (event.target.id === 'audition-modal') closeModal()">
+        <div class="modal-content w-full max-w-lg mx-auto rounded-xl p-8 transform transition-all duration-300 relative">
+            
+            <!-- Close Button -->
+            <button onclick="closeModal()" class="close-button absolute top-4 right-4 text-3xl font-light leading-none transition-all duration-200 p-2 rounded-full hover:bg-white/10">
+                &times;
+            </button>
+
+            <h3 class="text-3xl font-extrabold mb-6 text-center" style="color: var(--color-aqua);">Submit Your Audition</h3>
+
+            <!-- Progress Bar -->
+            <div class="w-full h-2 bg-gray-700 rounded-full mb-8">
+                <div id="progress-bar" class="h-2 rounded-full transition-all duration-500 ease-in-out" style="width: 33%; background-color: var(--color-gold);"></div>
+            </div>
+
+            <!-- Multi-Step Form Container -->
+            <form id="audition-form" onsubmit="return false;">
+
+                <!-- Step 1: Personal Details (UPDATED) -->
+                <div id="step-1" class="form-step">
+                    <h4 class="text-xl font-bold mb-4">Step 1: Contact Information</h4>
+                    <div class="space-y-4">
+                        <input type="text" placeholder="Full Name" required class="form-input w-full p-3 rounded-lg">
+                        <input type="email" placeholder="Email Address" required class="form-input w-full p-3 rounded-lg">
+                        <input type="tel" placeholder="Mobile Number" required class="form-input w-full p-3 rounded-lg">
+                        <input type="date" placeholder="Date of Birth" required class="form-input w-full p-3 rounded-lg">
+                    </div>
+                    <div class="mt-8 flex justify-end">
+                        <button onclick="nextStep()" class="px-8 py-3 rounded-lg font-bold text-lg" style="background-color: var(--color-aqua); color: var(--color-indigo-dark);">
+                            Next →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Performance Details -->
+                <div id="step-2" class="form-step hidden">
+                    <h4 class="text-xl font-bold mb-4">Step 2: Performance Details</h4>
+                    <div class="space-y-4">
+                        <input type="text" placeholder="Song Title" required class="form-input w-full p-3 rounded-lg">
+                        <input type="text" placeholder="Original Artist/Composer" required class="form-input w-full p-3 rounded-lg">
+                        <textarea placeholder="Tell us why you chose this song (optional)" rows="3" class="form-input w-full p-3 rounded-lg"></textarea>
+                    </div>
+                    <div class="mt-8 flex justify-between">
+                        <button onclick="prevStep()" class="px-6 py-3 rounded-lg font-bold bg-gray-600 text-white">
+                            ← Back
+                        </button>
+                        <button onclick="nextStep()" class="px-8 py-3 rounded-lg font-bold text-lg" style="background-color: var(--color-aqua); color: var(--color-indigo-dark);">
+                            Next →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Media Upload -->
+                <div id="step-3" class="form-step hidden">
+                    <h4 class="text-xl font-bold mb-4">Step 3: Upload Audio/Video</h4>
+                    <div class="space-y-4">
+                        <p class="text-sm text-gray-400 mb-2">Supported formats: MP3, MP4, MOV. Max size: 200MB.</p>
+                        <label for="media-upload" class="flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-xl cursor-pointer transition-colors duration-200" style="border-color: var(--color-aqua);">
+                            <svg class="w-12 h-12 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--color-gold);">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                            </svg>
+                            <span class="text-lg font-medium text-white">Drag & Drop or Click to Select File</span>
+                            <input type="file" id="media-upload" required class="hidden">
+                        </label>
+                        <div class="flex items-center space-x-2 pt-2">
+                            <input type="checkbox" id="consent" required class="w-4 h-4 rounded" style="accent-color: var(--color-gold);">
+                            <label for="consent" class="text-sm text-gray-300">I agree to the terms and conditions.</label>
+                        </div>
+                    </div>
+                    <div class="mt-8 flex justify-between">
+                        <button onclick="prevStep()" class="px-6 py-3 rounded-lg font-bold bg-gray-600 text-white">
+                            ← Back
+                        </button>
+                        <button onclick="submitForm()" class="px-8 py-3 rounded-lg font-bold text-lg cta-gold" type="submit">
+                            SUBMIT AUDITION
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Submission Success Message -->
+                <div id="step-success" class="form-step hidden text-center pt-10">
+                    <svg class="w-20 h-20 mx-auto mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--color-gold);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944c2.812 0 5.485.801 7.747 2.222m-2.22 15.658A11.955 11.955 0 0112 21.056c-2.812 0-5.485-.801-7.747-2.222m2.22-15.658L12 9l5.618-4.016"></path>
+                    </svg>
+                    <h4 class="text-3xl font-extrabold mb-4" style="color: var(--color-aqua);">Submission Successful!</h4>
+                    <p class="text-lg text-gray-300 mb-8">Thank you for sharing your talent. We'll be in touch soon regarding the review process!</p>
+                    <button onclick="closeModal()" class="px-8 py-3 rounded-lg font-bold text-lg bg-gray-600 text-white">
+                        Close
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</body>
+
+<script>
+    // --- Countdown Timer Logic ---
+    var x; 
+    
+    // Set the deadline ONCE, outside the update function
+    const deadline = new Date();
+    deadline.setDate(deadline.getDate() + 7); // Set to 7 days in the future
+    deadline.setHours(23, 59, 59, 999); // Set to end of the day
+
+    function updateCountdown() {
+        
+        const now = new Date().getTime();
+        const distance = deadline.getTime() - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Display the result in the element
+        const countdownEl = document.getElementById("countdown");
+        if (countdownEl) {
+            if (distance < 0) {
+                clearInterval(x);
+                countdownEl.innerHTML = "AUDITIONS CLOSED";
+            } else {
+                const formatTime = (t) => String(t).padStart(2, '0');
+                countdownEl.innerHTML = 
+                    formatTime(days) + ":" + 
+                    formatTime(hours) + ":" + 
+                    formatTime(minutes) + ":" + 
+                    formatTime(seconds);
+            }
+        }
+    }
+
+    // Run the update function immediately and then every second
+    updateCountdown();
+    x = setInterval(updateCountdown, 1000);
+
+
+    // --- Audition Form Modal Logic ---
+    let currentStep = 1;
+    const totalSteps = 3;
+    const modal = document.getElementById('audition-modal');
+    const progressBar = document.getElementById('progress-bar');
+    const formSteps = [
+        document.getElementById('step-1'),
+        document.getElementById('step-2'),
+        document.getElementById('step-3'),
+        document.getElementById('step-success')
+    ];
+
+    function updateProgressBar() {
+        // Progress is based on the current step out of total steps
+        const progressPercentage = (currentStep / totalSteps) * 100;
+        progressBar.style.width = `${progressPercentage.toFixed(0)}%`;
+    }
+
+    function showStep(stepIndex) {
+        formSteps.forEach((step, index) => {
+            step.classList.add('hidden');
+        });
+        // Check if the target step exists (index is stepIndex - 1)
+        if (formSteps[stepIndex - 1]) {
+            formSteps[stepIndex - 1].classList.remove('hidden');
+            currentStep = stepIndex;
+            updateProgressBar();
+        }
+    }
+
+    function openModal() {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        // Reset form to step 1 when opening
+        showStep(1);
+    }
+
+    function closeModal() {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+        // Reset form fields here if necessary
+    }
+
+    function nextStep() {
+        // Simple validation check for the current step's required fields
+        const currentInputs = formSteps[currentStep - 1].querySelectorAll('input[required], textarea[required], select[required]');
+        let allValid = true;
+
+        currentInputs.forEach(input => {
+            // Check for empty value or unchecked checkbox
+            if (!input.value.trim() || (input.type === 'checkbox' && !input.checked)) {
+                allValid = false;
+                // Highlight input field in red
+                input.style.border = '2px solid red';
+            } else {
+                // Reset border for valid fields
+                input.style.border = '1px solid rgba(66, 242, 242, 0.3)';
+            }
+        });
+
+        if (allValid && currentStep < totalSteps) {
+            showStep(currentStep + 1);
+        } else if (!allValid) {
+            // Note: Use a custom UI element for errors in a real app, not console.error
+            console.error("Please fill all required fields before proceeding.");
+        }
+    }
+
+    function prevStep() {
+        if (currentStep > 1) {
+            showStep(currentStep - 1);
+        }
+    }
+
+    function submitForm() {
+        // Final validation check for Step 3
+        const mediaUpload = document.getElementById('media-upload');
+        const consent = document.getElementById('consent');
+        
+        // Custom Modal UI instead of alert()
+        const displayError = (message) => {
+            const errorElement = document.createElement('div');
+            errorElement.className = 'absolute top-0 left-0 right-0 bg-red-800 text-white p-3 text-center rounded-t-xl transition-all duration-300';
+            errorElement.textContent = message;
+            modal.querySelector('.modal-content').prepend(errorElement);
+            setTimeout(() => errorElement.remove(), 4000);
+        };
+
+        if (mediaUpload.files.length === 0) {
+             displayError('Please upload your audio or video file.'); 
+             return;
+        }
+        if (!consent.checked) {
+            displayError('You must agree to the terms and conditions to submit.');
+            return;
+        }
+
+        // --- Simulated Submission Logic ---
+        console.log("Audition form submitted successfully!");
+        
+        // Hide progress bar and show success message (Step 4)
+        progressBar.style.width = '100%'; 
+        showStep(totalSteps + 1); // Show success step
+
+        // The user requested automatic closing after submission
+        setTimeout(() => {
+            closeModal();
+            // Reset form to step 1 for next attempt
+            showStep(1); 
+        }, 3000); // Closes after 3 seconds
+    }
+
+    // --- Mobile Menu Toggle Logic ---
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+    const mobileMenuCloseButton = document.getElementById('mobile-menu-close-button');
+
+    function toggleMenu() {
+        const isMenuOpen = !mobileMenu.classList.contains('hidden');
+        if (isMenuOpen) {
+            mobileMenu.classList.add('hidden');
+            mobileMenuButton.innerHTML = '☰'; // Hamburger icon
+            document.body.style.overflow = ''; // Restore scrolling
+        } else {
+            mobileMenu.classList.remove('hidden');
+            // No need to change the header icon anymore, as we have a dedicated close button
+            // mobileMenuButton.innerHTML = '&times;'; 
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+    }
+
+    mobileMenuButton.addEventListener('click', toggleMenu);
+    mobileMenuCloseButton.addEventListener('click', toggleMenu);
+
+    // Add event listener to each nav link to close the menu on click
+    mobileNavLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (!mobileMenu.classList.contains('hidden')) {
+                toggleMenu();
+            }
+        });
+    });
+</script>
+
+</html>

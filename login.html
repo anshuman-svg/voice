@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Your Results - Voice.io</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Reusing the exact same color palette and base styles from home.html */
+        :root {
+            --color-indigo-dark: #130a2f;
+            --color-aqua: #42f2f2;
+            --color-gold: #FFC300;
+            --color-purple-light: #4A1D7C;
+            --color-dark-card: #1D103F;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--color-indigo-dark);
+            color: #E0E7FF;
+            overflow-x: hidden;
+        }
+
+        .form-input {
+            background-color: var(--color-indigo-dark);
+            border: 1px solid rgba(66, 242, 242, 0.3);
+            color: white;
+        }
+        .form-input:focus {
+            border-color: var(--color-gold);
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 195, 0, 0.5);
+        }
+
+        .cta-gold {
+            background-color: var(--color-gold);
+            color: var(--color-indigo-dark);
+            box-shadow: 0 0 40px rgba(255, 195, 0, 0.8);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cta-gold:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 60px rgba(255, 195, 0, 1);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Simplified Navigation Bar -->
+    <header class="absolute top-0 left-0 right-0 z-50 p-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Logo/Title Placeholder -->
+            <a href="home.html" class="text-3xl font-extrabold text-white tracking-wider">VOICE<span style="color: var(--color-aqua);">.IO</span></a>
+            
+            <!-- Back to Home Link -->
+            <a href="home.html" class="text-gray-300 hover:text-white transition duration-200 font-medium">
+                ← Back to Home
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center px-4">
+        <div class="w-full max-w-md text-center">
+            
+            <!-- Login Card -->
+            <div class="p-8 sm:p-10 rounded-xl" style="background-color: var(--color-dark-card);">
+                <h2 class="text-4xl font-extrabold mb-4" style="color: var(--color-aqua);">Check Your Results</h2>
+                <p class="text-gray-400 mb-8">
+                    Enter the email or mobile number you used for your audition to see your status.
+                </p>
+
+                <form onsubmit="return false;">
+                    <div class="space-y-6">
+                        <input type="text" placeholder="Email or Mobile Number" required class="form-input w-full p-4 rounded-lg text-lg text-center">
+                        
+                        <button type="submit" class="w-full px-8 py-4 rounded-lg font-bold text-xl cta-gold">
+                            CHECK STATUS
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Placeholder for results display (can be implemented later) -->
+            <!-- 
+            <div id="results-display" class="hidden mt-8 p-8 rounded-xl" style="background-color: var(--color-dark-card);">
+                <h3 class="text-3xl font-bold" style="color: var(--color-gold);">Congratulations, [Name]!</h3>
+                <p class="text-lg mt-4">You've advanced to the next round! Our team will be in contact with you shortly with more details.</p>
+            </div> 
+            -->
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 px-4 text-center text-gray-500 text-sm">
+        <div class="max-w-6xl mx-auto">
+            <p>&copy; 2024 Voice.io Auditions. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
