@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Voice.io</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Define the custom color palette to match the mood of the images */
+        :root {
+            --color-indigo-dark: #130a2f; /* Deep Indigo Background */
+            --color-aqua: #42f2f2;       /* Electric Aqua */
+            --color-gold: #FFC300;       /* Primary Gold Accent */
+            --color-dark-card: #1D103F;  /* Slightly lighter background for cards */
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--color-indigo-dark);
+            color: #E0E7FF; /* Off-white text */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Form Input Styles */
+        .form-input {
+            background-color: var(--color-indigo-dark);
+            border: 1px solid rgba(66, 242, 242, 0.3);
+            color: white;
+            transition: all 0.2s;
+        }
+        .form-input:focus {
+            border-color: var(--color-gold);
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 195, 0, 0.5);
+        }
+        
+        .cta-gold {
+            background-color: var(--color-gold);
+            color: var(--color-indigo-dark);
+            transition: background-color 0.2s;
+        }
+        .cta-gold:hover {
+            background-color: #ffda6a;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 left-0 right-0 z-50 p-4 bg-transparent backdrop-blur-sm" style="background-color: rgba(19, 10, 47, 0.9);">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Logo/Title Placeholder -->
+            <a href="index.html" class="text-3xl font-extrabold text-white tracking-wider">SURTAAL<span style="color: var(--color-aqua);">.IO</span></a>
+            
+            <!-- Back to Home Link -->
+            <a href="index.html" class="text-gray-300 hover:text-white transition duration-200 font-medium">
+                ← Back to Home
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow py-16 sm:py-24 px-4">
+        <div class="max-w-4xl mx-auto">
+            <header class="text-center mb-16">
+                <h1 class="text-5xl sm:text-6xl font-extrabold mb-4" style="color: var(--color-aqua);">GET IN TOUCH</h1>
+                <p class="text-xl sm:text-2xl text-gray-400">We're here to help you shine. Send us a message below.</p>
+            </header>
+
+            <div class="p-8 rounded-xl" style="background-color: var(--color-dark-card);">
+                <h2 class="text-3xl font-bold mb-6 text-white text-center">Contact Form</h2>
+                <form onsubmit="event.preventDefault(); submitContactForm();" class="space-y-6 max-w-lg mx-auto">
+                    
+                    <input type="text" id="name" placeholder="Your Name" required class="form-input w-full p-4 rounded-lg">
+                    
+                    <input type="email" id="email" placeholder="Your Email" required class="form-input w-full p-4 rounded-lg">
+                    
+                    <input type="text" id="subject" placeholder="Subject" required class="form-input w-full p-4 rounded-lg">
+                    
+                    <textarea id="message" placeholder="Your Message or Inquiry" rows="6" required class="form-input w-full p-4 rounded-lg"></textarea>
+                    
+                    <button type="submit" class="w-full p-4 rounded-lg text-lg font-bold cta-gold">
+                        SEND MESSAGE
+                    </button>
+
+                    <div id="contact-status" class="text-center mt-4 hidden p-3 rounded-lg text-sm font-medium" style="background-color: rgba(66, 242, 242, 0.2); color: var(--color-aqua);"></div>
+                </form>
+            </div>
+            
+            <!-- Other Contact Info (Below the form) -->
+            <div class="mt-16 text-center">
+                <h3 class="text-2xl font-bold mb-6" style="color: var(--color-aqua);">Other Ways to Connect</h3>
+                <div class="flex flex-col sm:flex-row justify-center space-y-6 sm:space-y-0 sm:space-x-12 text-lg text-gray-300">
+                    <p><strong>Support Email:</strong> <a href="mailto:support@voice.io" class="hover:text-white transition" style="color: var(--color-aqua);">support@surtaal.io</a></p>
+                    <p><strong>Press Inquiries:</strong> <a href="mailto:press@voice.io" class="hover:text-white transition" style="color: var(--color-aqua);">press@surtaal.io</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="mt-auto py-8 px-4 text-center text-gray-500 text-sm border-t border-gray-800">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center">
+            <div class="flex space-x-4 mb-4 sm:mb-0">
+                <a href="#" class="hover:text-white transition">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition">Terms & Conditions</a>
+            </div>
+            <p>&copy; 2025 Surtaal.io Auditions. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+
+<script>
+    // --- Contact Form Logic ---
+    function submitContactForm() {
+        const statusEl = document.getElementById('contact-status');
+        
+        // Simple client-side validation (browser handles 'required' fields)
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+
+        if (!name || !email || !message) {
+            statusEl.textContent = "Please fill in all fields.";
+            statusEl.style.backgroundColor = 'rgba(255, 0, 0, 0.2)';
+            statusEl.classList.remove('hidden');
+            return;
+        }
+
+        // Simulate successful form submission
+        statusEl.textContent = "Message sent successfully! We will get back to you shortly.";
+        statusEl.style.backgroundColor = 'rgba(66, 242, 242, 0.2)';
+        statusEl.classList.remove('hidden');
+
+        // Reset the form after a slight delay
+        setTimeout(() => {
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('subject').value = '';
+            document.getElementById('message').value = '';
+        }, 1000);
+        
+        // Hide status after a few seconds
+        setTimeout(() => {
+            statusEl.classList.add('hidden');
+        }, 5000);
+    }
+</script>
+
+</html>
